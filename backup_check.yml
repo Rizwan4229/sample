@@ -1,0 +1,32 @@
+---
+- name: Check Backup Directories
+  hosts: backup_servers
+  tasks:
+    - name: Check if /home/migf_backup exists
+      stat:
+        path: /home/migf_backup
+      register: migf_backup
+
+    - name: Check if /home/migb_backup exists
+      stat:
+        path: /home/migb_backup
+      register: migb_backup
+
+    - name: Check if /home/wiki_backup exists
+      stat:
+        path: /home/wiki_backup
+      register: wiki_backup
+
+    - name: Check if /home/support_backup exists
+      stat:
+        path: /home/support_backup
+      register: support_backup
+
+    - name: Display backup status
+      debug:
+        msg: |
+          migf_backup: {{ migf_backup.stat.exists }}
+          migb_backup: {{ migb_backup.stat.exists }}
+          wiki_backup: {{ wiki_backup.stat.exists }}
+          support_backup: {{ support_backup.stat.exists }}
+
