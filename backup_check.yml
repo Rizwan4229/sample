@@ -1,6 +1,6 @@
 ---
-- name: Check Backup Directories
-  hosts: 84.46.245.137
+- name: Check Backup Directories and List Contents
+  hosts: backup_servers
   tasks:
     - name: Check if /home/migf_backup exists
       stat:
@@ -22,11 +22,34 @@
         path: /home/support_backup
       register: support_backup
 
-    - name: Display backup status
+    - name: List contents of /home/migf_backup if it exists
+      command: ls /home/migf_backup
+      when: migf_backup.stat.exists
+      register: migf_backup_contents
+
+    - name: List contents of /home/migb_backup if it exists
+      command: ls /home/migb_backup
+      when: migb_backup.stat.exists
+      register: migb_backup_contents
+
+    - name: List contents of /home/wiki_backup if it exists
+      command: ls /home/wiki_backup
+      when: wiki_backup.stat.exists
+      register: wiki_backup_contents
+
+    - name: List contents of /home/support_backup if it exists
+      command: ls /home/support_backup
+      when: support_backup.stat.exists
+      register: support_backup_contents
+
+    - name: Display backup status and contents
       debug:
         msg: |
           migf_backup: {{ migf_backup.stat.exists }}
           migb_backup: {{ migb_backup.stat.exists }}
           wiki_backup: {{ wiki_backup.stat.exists }}
           support_backup: {{ support_backup.stat.exists }}
-
+          migf_backup contents: {{ migf_backup_contents.stdout | default('N/A') }}
+          migb_backup contents: {{ migb_backup_contents.stdout | default('N/A') }}
+          wiki_backup contents: {{ wiki_backup_contents.stdout | default('N/A') }}
+          support_backup contents: {{ support_backup_contents.stdout | default('N/A') }}
