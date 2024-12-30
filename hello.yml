@@ -1,8 +1,59 @@
 ---
-- name: This is a hello-world example
-  hosts: migration
+- name: Check Backup Directories and List Detailed Contents
+  hosts: backup_servers
   tasks:
-    - name: Create a file called '/tmp/testfile.txt' with the content 'hello world'.
-      copy:
-        content: hello worldn
-        dest: /var/lib/awx/projects/automation/testfile.txt
+    - name: Check if /home/migf_backup exists
+      stat:
+        path: /home/migf_backup
+      register: migf_backup
+
+    - name: Check if /home/migb_backup exists
+      stat:
+        path: /home/migb_backup
+      register: migb_backup
+
+    - name: Check if /home/wiki_backup exists
+      stat:
+        path: /home/wiki_backup
+      register: wiki_backup
+
+    - name: Check if /home/support_backup exists
+      stat:
+        path: /home/support_backup
+      register: support_backup
+
+    - name: List detailed contents of /home/migf_backup if it exists
+      command: ls -larth /home/migf_backup
+      when: migf_backup.stat.exists
+      register: migf_backup_details
+
+    - name: List detailed contents of /home/migb_backup if it exists
+      command: ls -larth /home/migb_backup
+      when: migb_backup.stat.exists
+      register: migb_backup_details
+
+    - name: List detailed contents of /home/wiki_backup if it exists
+      command: ls -larth /home/wiki_backup
+      when: wiki_backup.stat.exists
+      register: wiki_backup_details
+
+    - name: List detailed contents of /home/support_backup if it exists
+      command: ls -larth /home/support_backup
+      when: support_backup.stat.exists
+      register: support_backup_details
+
+    - name: Display backup status and detailed contents
+      debug:
+        msg: |
+          migf_backup: {{ migf_backup.stat.exists }}
+          migb_backup: {{ migb_backup.stat.exists }}
+          wiki_backup: {{ wiki_backup.stat.exists }}
+          support_backup: {{ support_backup.stat.exists }}
+          migf_backup details:
+          {{ migf_backup_details.stdout | default('N/A') }}
+          migb_backup details:
+          {{ migb_backup_details.stdout | default('N/A') }}
+          wiki_backup details:
+          {{ wiki_backup_details.stdout | default('N/A') }}
+          support_backup details:
+          {{ support_backup_details.stdout | default('N/A') }}
