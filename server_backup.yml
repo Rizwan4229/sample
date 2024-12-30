@@ -1,6 +1,6 @@
 ---
 - name: Check Backup Directories and List Detailed Contents
-  hosts: backup_servers
+  hosts: 84.46.245.137
   tasks:
     - name: Check if /home/migf_backup exists
       stat:
