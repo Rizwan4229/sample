@@ -1,6 +1,6 @@
 ---
 - name: Check Backup Directories and Display Contents
-  hosts: ubuntu_backup_server
+  hosts: 161.35.42.148
   tasks:
     - name: Check if /root/backup/frontend_backup exists
       stat:
