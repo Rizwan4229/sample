@@ -1,6 +1,6 @@
 ---
 - name: List backup directory on Windows server using SSH
-  hosts: 164.68.98.216
+  hosts: windows_server
   tasks:
     - name: List contents of the backup directory
       shell: dir C:\Users\rizwan\backup
