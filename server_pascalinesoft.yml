@@ -1,0 +1,11 @@
+---
+- name: List backup directory on Windows server using SSH
+  hosts: windows
+  tasks:
+    - name: List contents of the backup directory
+      shell: dir C:\Users\rizwan\backup
+      register: backup_contents
+
+    - name: Display the backup directory contents
+      debug:
+        var: backup_contents.stdout_lines
