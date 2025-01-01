@@ -22,6 +22,11 @@
         path: /home/support_backup
       register: support_backup
 
+    - name: Check if /home/website exists
+      stat:
+        path: /home/website
+      register: website_backup
+
     - name: Get contents of /home/migf_backup
       command: ls -larth /home/migf_backup
       register: migf_backup_contents
@@ -42,6 +47,11 @@
       register: support_backup_contents
       when: support_backup.stat.exists
 
+    - name: Get contents of /home/website
+      command: ls -larth /home/website
+      register: website_backup_contents
+      when: website_backup.stat.exists
+
     - name: Display backup status and detailed contents
       debug:
         msg: |
@@ -51,10 +61,13 @@
             {{ migf_backup_contents.stdout_lines | join("\n            ") if migf_backup.stat.exists else "Directory does not exist" }}
           - migb_backup: {{ migb_backup.stat.exists }}
             Details:
-            {{ migb_backup_contents.stdout_lines | join("\n            ") if migb_backup.stat.exists else "Directory does not exist" }}
+            {{ migf_backup_contents.stdout_lines | join("\n            ") if migf_backup.stat.exists else "Directory does not exist" }}
           - wiki_backup: {{ wiki_backup.stat.exists }}
             Details:
             {{ wiki_backup_contents.stdout_lines | join("\n            ") if wiki_backup.stat.exists else "Directory does not exist" }}
           - support_backup: {{ support_backup.stat.exists }}
             Details:
             {{ support_backup_contents.stdout_lines | join("\n            ") if support_backup.stat.exists else "Directory does not exist" }}
+          - website_backup: {{ website_backup.stat.exists }}
+            Details:
+            {{ website_backup_contents.stdout_lines | join("\n            ") if website_backup.stat.exists else "Directory does not exist" }}
