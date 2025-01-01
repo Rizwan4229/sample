@@ -1,0 +1,60 @@
+---
+- name: Check Backup Directories and Display Contents
+  hosts: ubuntu_backup_server
+  tasks:
+    - name: Check if /root/backup/frontend_backup exists
+      stat:
+        path: /root/backup/frontend_backup
+      register: frontend_backup
+
+    - name: Check if /root/backup/backend_backup exists
+      stat:
+        path: /root/backup/backend_backup
+      register: backend_backup
+
+    - name: Check if /root/backup/database_backup exists
+      stat:
+        path: /root/backup/database_backup
+      register: database_backup
+
+    - name: Check if /root/backup/tomcat_backup exists
+      stat:
+        path: /root/backup/tomcat_backup
+      register: tomcat_backup
+
+    - name: Get contents of /root/backup/frontend_backup
+      command: ls -larth /root/backup/frontend_backup
+      register: frontend_backup_contents
+      when: frontend_backup.stat.exists
+
+    - name: Get contents of /root/backup/backend_backup
+      command: ls -larth /root/backup/backend_backup
+      register: backend_backup_contents
+      when: backend_backup.stat.exists
+
+    - name: Get contents of /root/backup/database_backup
+      command: ls -larth /root/backup/database_backup
+      register: database_backup_contents
+      when: database_backup.stat.exists
+
+    - name: Get contents of /root/backup/tomcat_backup
+      command: ls -larth /root/backup/tomcat_backup
+      register: tomcat_backup_contents
+      when: tomcat_backup.stat.exists
+
+    - name: Display backup status and detailed contents
+      debug:
+        msg: |
+          Backup Status:
+          - frontend_backup: {{ frontend_backup.stat.exists }}
+            Details:
+            {{ frontend_backup_contents.stdout_lines | join("\n            ") if frontend_backup.stat.exists else "Directory does not exist" }}
+          - backend_backup: {{ backend_backup.stat.exists }}
+            Details:
+            {{ backend_backup_contents.stdout_lines | join("\n            ") if backend_backup.stat.exists else "Directory does not exist" }}
+          - database_backup: {{ database_backup.stat.exists }}
+            Details:
+            {{ database_backup_contents.stdout_lines | join("\n            ") if database_backup.stat.exists else "Directory does not exist" }}
+          - tomcat_backup: {{ tomcat_backup.stat.exists }}
+            Details:
+            {{ tomcat_backup_contents.stdout_lines | join("\n            ") if tomcat_backup.stat.exists else "Directory does not exist" }}
