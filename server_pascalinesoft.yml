@@ -3,7 +3,7 @@
   hosts: server.pascalinesoft.com
   tasks:
     - name: List contents of the backup directory
-      shell: dir C:\Users\rizwan\backup
+      shell: dir C:\OpenSSH\OpenSSH-Win64\OpenSSH-Win64
       register: backup_contents
 
     - name: Display the backup directory contents
