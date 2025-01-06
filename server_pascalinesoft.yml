@@ -3,7 +3,7 @@
   hosts: server.pascalinesoft.com
   connection: psrp
   vars:
-    ansible_python_interpreter: /myenv/bin/python
+    ansible_python_interpreter: /usr/bin/python3
   tasks:
     - name: List contents of the backup directory
       win_shell: dir C:\OpenSSH\OpenSSH-Win64\OpenSSH-Win64
