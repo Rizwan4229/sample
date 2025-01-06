@@ -1,9 +1,10 @@
 ---
-- name: List backup directory on Windows server using SSH
+- name: List backup directory on Windows server using PSRP
   hosts: server.pascalinesoft.com
+  connection: psrp
   tasks:
     - name: List contents of the backup directory
-      shell: dir C:\OpenSSH\OpenSSH-Win64\OpenSSH-Win64
+      win_shell: dir C:\OpenSSH\OpenSSH-Win64\OpenSSH-Win64
       register: backup_contents
 
     - name: Display the backup directory contents
