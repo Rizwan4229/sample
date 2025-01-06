@@ -12,3 +12,8 @@
     - name: Display the backup directory contents
       debug:
         var: backup_contents.stdout_lines
+  pre_tasks:
+    - name: Install pypsrp
+      pip:
+        name: pypsrp
+      become: yes
